@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kegiatan;
+use App\Models\ReviewRating;
+use App\Models\User;
 use Illuminate\Http\Request;
+
 
 class KegiatanController extends Controller
 {
@@ -13,6 +16,11 @@ class KegiatanController extends Controller
     public function index()
     {
         $kegiatan = Kegiatan::all();
+
+        //belum
+        // $rating = $kegiatan->rating;
+        // $user = $kegiatan->user;
+
         return view('admin.dashboard', compact('kegiatan'));
     }
 
@@ -55,7 +63,7 @@ class KegiatanController extends Controller
         $kegiatan->content = $request->content;
         // add kegiatan->foto to database as base64 image
         $kegiatan->foto = base64_encode(file_get_contents($request->file('foto')->getRealPath()));
-        
+
         // move foto to public folder in subfolder foto-kegiatan, and prevent file name from being duplicated
         // $nama_foto = time()."". $request->file('foto')->getClientOriginalName();
         // $request->file('foto')->move(public_path('foto-kegiatan'), $nama_foto);
@@ -73,6 +81,10 @@ class KegiatanController extends Controller
      */
     public function show($slug)
     {
+
+
+
+        //tombol share
         $shareButton = \Share::page(
             route('post.show', $slug),
             'PSTI FT ULM Memiliki Kegiatan baru. Lihat disini : ' . Kegiatan::where('slug', $slug)->firstOrFail()->nama
@@ -85,10 +97,15 @@ class KegiatanController extends Controller
             ->getRawLinks();
 
         return view('content', [
-                    'kegiatan' => Kegiatan::where('slug', $slug)->firstOrFail(),
-                    'shareComponent' => $shareButton,
-                    'title' => Kegiatan::where('slug', $slug)->firstOrFail()->nama
-                ]);
+            'kegiatan' => Kegiatan::where('slug', $slug)->firstOrFail(),
+            'shareComponent' => $shareButton,
+            'title' => Kegiatan::where('slug', $slug)->firstOrFail()->nama
+        ]);
+    }
+
+    public function showrating($id)
+    {
+        $post_detail = Kegiatan::with('reviewrating')->find($id);
     }
 
     /**
@@ -129,8 +146,8 @@ class KegiatanController extends Controller
         $kegiatan->tanggal = $request->tanggal;
         $kegiatan->tempat = $request->tempat;
         $kegiatan->content = $request->content;
-        
-        if($request->file('foto')){
+
+        if ($request->file('foto')) {
             $kegiatan->foto = base64_encode(file_get_contents($request->file('foto')->getRealPath()));
         }
 
@@ -146,5 +163,18 @@ class KegiatanController extends Controller
     {
         Kegiatan::destroy($id);
         return redirect('/admin')->with('status', 'Kegiatan berhasil dihapus!');
+    }
+
+    public function reviewstore(Request $request)
+    {
+        $review = new ReviewRating();
+        $review->post_id = $request->post_id;
+        $review->name    = $request->name;
+        $review->email   = $request->email;
+        $review->phone   = $request->phone;
+        $review->comments = $request->comment;
+        $review->star_rating = $request->rating;
+        $review->save();
+        return redirect()->back()->with('flash_msg_success', 'Your review has been submitted Successfully,');
     }
 }

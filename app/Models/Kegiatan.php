@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 
+
 class Kegiatan extends Model
 {
     use HasFactory;
     use Sluggable;
-    
+
     protected $table = 'kegiatan';
     protected $fillable = [
         'nama',
@@ -18,7 +19,8 @@ class Kegiatan extends Model
         'tempat',
         'content',
         'foto',
-        'slug'
+        'slug',
+
     ];
 
     public function sluggable(): array
@@ -28,5 +30,10 @@ class Kegiatan extends Model
                 'source' => 'nama'
             ]
         ];
+    }
+
+    public function reviewrating()
+    {
+        return $this->hasMany(ReviewRating::class);
     }
 }

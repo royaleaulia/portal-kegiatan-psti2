@@ -2,7 +2,6 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Dashboard') }}
-        </h2>
     </x-slot>
 
     <div class="py-12">
@@ -24,25 +23,24 @@
                         </thead>
                         <tbody>
                             @foreach ($kegiatan as $item)
-                                <tr>
-                                    <td class="w-1/3">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="avatar">
-                                                <div class="mask mask-squircle w-12 h-12">
-                                                    <img src="data:image/jpeg;base64,{{ $item->foto }}"
-                                                        alt="Avatar Tailwind CSS Component" />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="font-bold break-words whitespace-normal">{{ $item->nama }}
-                                                </div>
+                            <tr>
+                                <td class="w-1/3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="avatar">
+                                            <div class="mask mask-squircle w-12 h-12">
+                                                <img src="data:image/jpeg;base64,{{ $item->foto }}" alt="Avatar Tailwind CSS Component" />
                                             </div>
                                         </div>
-                                    </td>
-                                    <td class="w-2/3 break-words whitespace-normal">
-                                        {{ $item->deskripsi }}
-                                    </td>
-                                </tr>
+                                        <div>
+                                            <div class="font-bold break-words whitespace-normal">{{ $item->nama }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="w-2/3 break-words whitespace-normal">
+                                    {{ $item->deskripsi }}
+                                </td>
+                            </tr>
                             @endforeach
 
                         </tbody>

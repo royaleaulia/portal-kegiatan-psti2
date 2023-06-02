@@ -12,6 +12,7 @@ class KegiatanSeeder extends Seeder
      */
     public function run(): void
     {
+        //generate data dummy
         \App\Models\Kegiatan::factory(10)->create();
     }
 }

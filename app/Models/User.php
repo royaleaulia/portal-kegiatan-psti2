@@ -12,14 +12,14 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-     /**
+    /**
      *The attributes that contain role
      *
      * @var string
      */
     const ROLE_USER = 'user';
     const ROLE_ADMIN = 'admin';
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -40,7 +40,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
     /**
      * The attributes that should be cast.
      *
@@ -49,4 +48,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function reviewrating()
+    {
+        return $this->hasMany(ReviewRating::class);
+    }
+
+    public function kegiatan()
+    {
+        return $this->hashMany(Kegiatan::class);
+    }
 }

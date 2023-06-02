@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::get('/', function () {
 
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+
 Route::get('tentang-kami', function () {
     return view('tentangkami');
 });
@@ -48,6 +50,17 @@ Route::middleware('auth')->prefix('user')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('user.profile.destroy');
 
     Route::resource('user', UserController::class);
+    Route::resource('user.comments', ReviewRating::class)->shallow();
+
+
+    #Manage Review
+    Route::post('/review-store', [UserController::class, 'reviewstore'])->name('review.store');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/post/{slug}', [PostController::class, 'show'])->name('post.show');
+Route::post('/post/{slug}/comments', [PostController::class, 'storeComment']);
+
+
+
+
+require __DIR__ . '/auth.php';
